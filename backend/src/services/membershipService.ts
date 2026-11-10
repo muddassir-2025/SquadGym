@@ -299,6 +299,6 @@ export async function membershipHistory(
   }));
 }
 
-export async function plansForGym(gymId: string) {
-  return listPlans(gymId);
+export async function plansForGym(gymId: string, includeInactive = false) {
+  return listPlans(gymId, includeInactive);
 }

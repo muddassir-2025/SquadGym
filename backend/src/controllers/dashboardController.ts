@@ -26,7 +26,9 @@ export async function leaderboardHandler(req: Request, res: Response): Promise<v
 }
 
 export async function plansHandler(req: Request, res: Response): Promise<void> {
-  const plans = await plansForGym(auth(req).gymId);
+  const context = auth(req);
+  const canManage = context.role === 'super_admin' || context.permissions.includes('memberships.manage');
+  const plans = await plansForGym(context.gymId, canManage);
   res.status(200).json(
     ok({
       plans: plans.map((plan) => ({

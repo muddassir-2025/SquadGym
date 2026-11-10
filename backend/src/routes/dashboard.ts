@@ -2,8 +2,15 @@ import { Router } from 'express';
 import { asyncHandler } from '../utils/asyncHandler';
 import { validate } from '../middleware/validate';
 import { requireAuth, requirePermission } from '../middleware/auth';
-import { apiLimiter } from '../middleware/rateLimit';
-import { chartQuerySchema, leaderboardQuerySchema, occupancyQuerySchema } from '../validators/schemas';
+import { apiLimiter, writeLimiter } from '../middleware/rateLimit';
+import {
+  chartQuerySchema,
+  idParams,
+  leaderboardQuerySchema,
+  occupancyQuerySchema,
+  planBodySchema,
+  planPatchSchema,
+} from '../validators/schemas';
 import {
   chartHandler,
   dashboardHandler,
@@ -11,6 +18,7 @@ import {
   occupancyHandler,
   plansHandler,
 } from '../controllers/dashboardController';
+import { createPlanHandler, removePlanHandler, updatePlanHandler } from '../controllers/adminController';
 
 export const dashboardRouter = Router();
 
@@ -42,3 +50,28 @@ leaderboardRouter.get(
 export const plansRouter = Router();
 plansRouter.use(requireAuth, apiLimiter);
 plansRouter.get('/', requirePermission('memberships.view'), asyncHandler(plansHandler));
+
+// Membership plan upkeep is available to any staff member who can manage memberships,
+// not just Super Admins. Removal deactivates the plan so history stays intact.
+plansRouter.post(
+  '/',
+  requirePermission('memberships.manage'),
+  writeLimiter,
+  validate(planBodySchema, 'body'),
+  asyncHandler(createPlanHandler),
+);
+plansRouter.patch(
+  '/:id',
+  requirePermission('memberships.manage'),
+  writeLimiter,
+  validate(idParams, 'params'),
+  validate(planPatchSchema, 'body'),
+  asyncHandler(updatePlanHandler),
+);
+plansRouter.delete(
+  '/:id',
+  requirePermission('memberships.manage'),
+  writeLimiter,
+  validate(idParams, 'params'),
+  asyncHandler(removePlanHandler),
+);

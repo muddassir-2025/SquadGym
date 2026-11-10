@@ -14,15 +14,15 @@ import androidx.compose.ui.unit.dp
 
 private val DarkColors = darkColorScheme(
     primary = Lime,
-    onPrimary = Color(0xFF10160A),
-    primaryContainer = Color(0xFF26330F),
+    onPrimary = Color(0xFF0B1A12),
+    primaryContainer = Color(0xFF22302A),
     onPrimaryContainer = Lime,
     secondary = Mint,
-    onSecondary = Color(0xFF04221B),
-    secondaryContainer = Color(0xFF123028),
+    onSecondary = Color(0xFF08201C),
+    secondaryContainer = Color(0xFF18302B),
     onSecondaryContainer = Mint,
     tertiary = Amber,
-    onTertiary = Color(0xFF241A02),
+    onTertiary = Color(0xFF231A05),
     background = Obsidian,
     onBackground = TextPrimaryDark,
     surface = Charcoal,
@@ -31,11 +31,11 @@ private val DarkColors = darkColorScheme(
     onSurfaceVariant = TextSecondaryDark,
     surfaceContainer = SurfaceDark,
     surfaceContainerHigh = SurfaceRaisedDark,
-    surfaceContainerHighest = Color(0xFF232E29),
-    surfaceContainerLow = Color(0xFF0D1311),
+    surfaceContainerHighest = Color(0xFF232725),
+    surfaceContainerLow = Color(0xFF0F1110),
     surfaceContainerLowest = Obsidian,
     outline = OutlineDark,
-    outlineVariant = Color(0xFF202B26),
+    outlineVariant = Color(0xFF202322),
     error = Coral,
     onError = Color(0xFF2B0B07),
     errorContainer = DangerTintDark,
@@ -47,13 +47,13 @@ private val DarkColors = darkColorScheme(
 private val LightColors = lightColorScheme(
     primary = Forest,
     onPrimary = Color.White,
-    primaryContainer = Color(0xFFD8EBC8),
+    primaryContainer = Color(0xFFDDEBE2),
     onPrimaryContainer = ForestDeep,
-    secondary = Color(0xFF1F6F5A),
+    secondary = Color(0xFF3F6F63),
     onSecondary = Color.White,
-    secondaryContainer = Color(0xFFD6F0E7),
-    onSecondaryContainer = Color(0xFF0B3A2E),
-    tertiary = Color(0xFF8A6400),
+    secondaryContainer = Color(0xFFE3EDE8),
+    onSecondaryContainer = Color(0xFF17352C),
+    tertiary = Color(0xFF7A6240),
     onTertiary = Color.White,
     background = CanvasLight,
     onBackground = TextPrimaryLight,
@@ -62,13 +62,13 @@ private val LightColors = lightColorScheme(
     surfaceVariant = SurfaceRaisedLight,
     onSurfaceVariant = TextSecondaryLight,
     surfaceContainer = SurfaceLight,
-    surfaceContainerHigh = Color(0xFFF0F3E9),
+    surfaceContainerHigh = Color(0xFFFBFBF8),
     surfaceContainerHighest = SurfaceRaisedLight,
-    surfaceContainerLow = Color(0xFFF9FBF4),
+    surfaceContainerLow = Color(0xFFFAFAF7),
     surfaceContainerLowest = Color.White,
     outline = OutlineLight,
-    outlineVariant = Color(0xFFE7ECE0),
-    error = Color(0xFFB3261E),
+    outlineVariant = Color(0xFFEDEDE7),
+    error = Color(0xFFA33A2E),
     onError = Color.White,
     errorContainer = DangerTintLight,
     onErrorContainer = Color(0xFF5F1410),
@@ -101,41 +101,41 @@ data class SquadColors(
 private val DarkExtras = SquadColors(
     isDark = true,
     accent = Lime,
-    accentInk = Color(0xFF10160A),
-    success = Color(0xFF6FE3A0),
+    accentInk = Color(0xFF0B1A12),
+    success = Color(0xFF8FD3A6),
     warning = Amber,
     danger = Coral,
     successTint = SuccessTintDark,
     warningTint = WarningTintDark,
     dangerTint = DangerTintDark,
     neutralTint = NeutralTintDark,
-    border = Color(0xFF243029),
-    chartBar = Lime,
-    chartBarMuted = Color(0xFF2F3D36),
-    chartGrid = Color(0xFF1F2A25),
-    overlay = Color(0xCC0A0F0D),
-    gradientTop = Color(0xFF16211B),
-    gradientBottom = Color(0xFF080B0A),
+    border = Color(0xFF272A28),
+    chartBar = Color(0xFFD7DCD4),
+    chartBarMuted = Color(0xFF2A2E2B),
+    chartGrid = Color(0xFF202322),
+    overlay = Color(0xCC0B0C0B),
+    gradientTop = Obsidian,
+    gradientBottom = Obsidian,
 )
 
 private val LightExtras = SquadColors(
     isDark = false,
-    accent = Color(0xFF3F7D20),
+    accent = Forest,
     accentInk = Color.White,
-    success = Color(0xFF1E7C46),
-    warning = Color(0xFF9A6B00),
-    danger = Color(0xFFB3261E),
+    success = Color(0xFF2E6B45),
+    warning = Color(0xFF8A6A2F),
+    danger = Color(0xFFA33A2E),
     successTint = SuccessTintLight,
     warningTint = WarningTintLight,
     dangerTint = DangerTintLight,
     neutralTint = NeutralTintLight,
-    border = Color(0xFFE2E8DA),
-    chartBar = Color(0xFF3F7D20),
-    chartBarMuted = Color(0xFFDCE5D2),
-    chartGrid = Color(0xFFE7ECE0),
-    overlay = Color(0xCCF4F6EF),
-    gradientTop = Color(0xFFEDF3E1),
-    gradientBottom = Color(0xFFF4F6EF),
+    border = OutlineLight,
+    chartBar = Color(0xFF242826),
+    chartBarMuted = Color(0xFFE9E9E4),
+    chartGrid = Color(0xFFEFEFEA),
+    overlay = Color(0xCCF7F7F4),
+    gradientTop = CanvasLight,
+    gradientBottom = CanvasLight,
 )
 
 val LocalSquadColors = staticCompositionLocalOf { DarkExtras }
@@ -146,11 +146,11 @@ object SquadGymTheme {
 }
 
 val SquadShapes = Shapes(
-    extraSmall = RoundedCornerShape(8.dp),
-    small = RoundedCornerShape(12.dp),
-    medium = RoundedCornerShape(18.dp),
-    large = RoundedCornerShape(24.dp),
-    extraLarge = RoundedCornerShape(30.dp),
+    extraSmall = RoundedCornerShape(6.dp),
+    small = RoundedCornerShape(10.dp),
+    medium = RoundedCornerShape(14.dp),
+    large = RoundedCornerShape(18.dp),
+    extraLarge = RoundedCornerShape(24.dp),
 )
 
 object Spacing {
@@ -158,10 +158,10 @@ object Spacing {
     val xs = 8.dp
     val sm = 12.dp
     val md = 16.dp
-    val lg = 20.dp
-    val xl = 28.dp
-    val xxl = 36.dp
-    val screen = 20.dp
+    val lg = 24.dp
+    val xl = 32.dp
+    val xxl = 44.dp
+    val screen = 24.dp
 }
 
 @Composable

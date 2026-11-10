@@ -89,6 +89,12 @@ export async function updatePlanHandler(req: Request, res: Response): Promise<vo
   res.status(200).json(ok(await updatePlanService(auth(req), id, input, meta(req))));
 }
 
+export async function removePlanHandler(req: Request, res: Response): Promise<void> {
+  const { id } = params<{ id: string }>(req);
+  // Plans are never hard-deleted: memberships keep pointing at them, so removal just hides them.
+  res.status(200).json(ok(await updatePlanService(auth(req), id, { isActive: false }, meta(req))));
+}
+
 export async function auditLogsHandler(req: Request, res: Response): Promise<void> {
   const input = query<{
     action?: string;

@@ -56,6 +56,7 @@ data class CachedPlanEntity(
     val currency: String,
     val isActive: Boolean,
     val sortOrder: Int,
+    val description: String? = null,
 )
 
 @Dao
@@ -93,6 +94,9 @@ interface CacheDao {
     @Query("SELECT * FROM cached_plans ORDER BY sortOrder")
     suspend fun plans(): List<CachedPlanEntity>
 
+    @Query("DELETE FROM cached_plans WHERE id NOT IN (:ids)")
+    suspend fun deletePlansExcept(ids: List<String>)
+
     @Query("DELETE FROM cached_members")
     suspend fun clearMembers()
 
@@ -105,7 +109,7 @@ interface CacheDao {
 
 @Database(
     entities = [CachedMemberEntity::class, CachedDocumentEntity::class, CachedPlanEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = true,
 )
 abstract class SquadGymDatabase : RoomDatabase() {

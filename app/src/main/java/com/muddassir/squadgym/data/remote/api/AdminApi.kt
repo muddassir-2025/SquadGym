@@ -19,6 +19,7 @@ import com.muddassir.squadgym.data.remote.dto.ShiftPatchRequest
 import com.muddassir.squadgym.data.remote.dto.ShiftRequest
 import com.muddassir.squadgym.data.remote.dto.UpdateAdminRequest
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -57,9 +58,12 @@ interface AdminApi {
     @PATCH("superadmin/gym/shifts/{id}")
     suspend fun updateShift(@Path("id") id: String, @Body body: ShiftPatchRequest): ApiEnvelope<ShiftDto>
 
-    @POST("superadmin/plans")
+    @POST("plans")
     suspend fun createPlan(@Body body: PlanRequest): ApiEnvelope<PlanDto>
 
-    @PATCH("superadmin/plans/{id}")
+    @PATCH("plans/{id}")
     suspend fun updatePlan(@Path("id") id: String, @Body body: PlanPatchRequest): ApiEnvelope<PlanDto>
+
+    @DELETE("plans/{id}")
+    suspend fun removePlan(@Path("id") id: String): ApiEnvelope<PlanDto>
 }

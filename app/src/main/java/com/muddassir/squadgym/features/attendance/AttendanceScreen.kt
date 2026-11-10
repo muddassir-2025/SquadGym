@@ -96,8 +96,8 @@ fun AttendanceScreen(
     ScreenBackground {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 120.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 120.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             item {
                 ScreenHeader(
@@ -358,21 +358,19 @@ private fun SummaryChip(label: String, value: Int, modifier: Modifier = Modifier
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(14.dp),
-        color = if (highlight) colors.accent.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceContainer,
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            if (highlight) colors.accent.copy(alpha = 0.35f) else colors.border,
-        ),
+        color = MaterialTheme.colorScheme.surfaceContainer,
+        border = androidx.compose.foundation.BorderStroke(1.dp, colors.border),
     ) {
-        Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
+        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp)) {
             Text(
                 text = value.toString(),
                 style = MaterialTheme.typography.headlineSmall,
                 color = if (highlight) colors.accent else MaterialTheme.colorScheme.onSurface,
             )
+            Spacer(Modifier.height(4.dp))
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
@@ -391,7 +389,7 @@ private fun AttendanceMemberCard(
     onOpen: () -> Unit,
 ) {
     val colors = SquadGymTheme.colors
-    GymCard(padding = 12.dp, onClick = onOpen) {
+    GymCard(padding = 16.dp, onClick = onOpen) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             MemberAvatar(
                 photoUrl = member.photoUrl,
@@ -480,7 +478,7 @@ private fun AttendanceMemberCard(
                             .height(34.dp)
                             .clickable(enabled = !marking, onClick = onMark),
                         shape = RoundedCornerShape(10.dp),
-                        color = colors.accent,
+                        color = MaterialTheme.colorScheme.onSurface,
                     ) {
                         Row(
                             modifier = Modifier.padding(horizontal = 10.dp),
@@ -488,7 +486,7 @@ private fun AttendanceMemberCard(
                         ) {
                             if (marking) {
                                 CircularProgressIndicator(
-                                    color = colors.accentInk,
+                                    color = MaterialTheme.colorScheme.surface,
                                     strokeWidth = 2.dp,
                                     modifier = Modifier.size(14.dp),
                                 )
@@ -496,15 +494,15 @@ private fun AttendanceMemberCard(
                                 Icon(
                                     Icons.Filled.Check,
                                     contentDescription = null,
-                                    tint = colors.accentInk,
+                                    tint = MaterialTheme.colorScheme.surface,
                                     modifier = Modifier.size(15.dp),
                                 )
                                 Spacer(Modifier.width(4.dp))
                                 Text(
                                     text = "Mark present",
                                     style = MaterialTheme.typography.labelSmall,
-                                    fontWeight = FontWeight.Bold,
-                                    color = colors.accentInk,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colorScheme.surface,
                                 )
                             }
                         }
@@ -526,7 +524,7 @@ private fun CorrectionDialog(
     androidx.compose.material3.AlertDialog(
         onDismissRequest = onDismiss,
         containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(18.dp),
         title = { Text("Correct attendance", style = MaterialTheme.typography.titleLarge) },
         text = {
             Column {

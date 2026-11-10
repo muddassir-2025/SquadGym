@@ -70,15 +70,10 @@ fun ScreenBackground(
     modifier: Modifier = Modifier,
     content: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit,
 ) {
-    val colors = SquadGymTheme.colors
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    listOf(colors.gradientTop, MaterialTheme.colorScheme.background, colors.gradientBottom),
-                ),
-            ),
+            .background(MaterialTheme.colorScheme.background),
         content = content,
     )
 }
@@ -87,11 +82,11 @@ fun ScreenBackground(
 fun GymCard(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
-    padding: Dp = Spacing.md,
+    padding: Dp = 20.dp,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val colors = SquadGymTheme.colors
-    val shape = RoundedCornerShape(22.dp)
+    val shape = RoundedCornerShape(18.dp)
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -155,11 +150,10 @@ fun PrimaryButton(
     loading: Boolean = false,
     icon: ImageVector? = null,
 ) {
-    val colors = SquadGymTheme.colors
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(54.dp)
+            .height(56.dp)
             .then(
                 if (enabled && !loading) {
                     Modifier.clickable(
@@ -171,11 +165,8 @@ fun PrimaryButton(
                     Modifier
                 },
             ),
-        shape = RoundedCornerShape(16.dp),
-        color = when {
-            !enabled -> MaterialTheme.colorScheme.surfaceVariant
-            else -> colors.accent
-        },
+        shape = RoundedCornerShape(14.dp),
+        color = if (!enabled) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.onSurface,
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -186,18 +177,18 @@ fun PrimaryButton(
                 CircularProgressIndicator(
                     modifier = Modifier.size(20.dp),
                     strokeWidth = 2.dp,
-                    color = colors.accentInk,
+                    color = MaterialTheme.colorScheme.surface,
                 )
             } else {
                 if (icon != null) {
-                    Icon(icon, contentDescription = null, tint = colors.accentInk, modifier = Modifier.size(18.dp))
+                    Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.surface, modifier = Modifier.size(18.dp))
                     Spacer(Modifier.width(8.dp))
                 }
                 Text(
                     text = text,
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = if (enabled) colors.accentInk else MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = if (enabled) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
@@ -215,7 +206,7 @@ fun SecondaryButton(
     val colors = SquadGymTheme.colors
     Surface(
         modifier = modifier
-            .height(48.dp)
+            .height(52.dp)
             .then(
                 if (enabled) {
                     Modifier.clickable(
@@ -285,7 +276,7 @@ fun GymTextField(
         singleLine = singleLine,
         minLines = minLines,
         textStyle = MaterialTheme.typography.bodyLarge,
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(12.dp),
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
         visualTransformation = if (isPassword && !revealed) {
             PasswordVisualTransformation()
@@ -312,13 +303,13 @@ fun GymTextField(
             { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error) }
         },
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = colors.accent,
+            focusedBorderColor = MaterialTheme.colorScheme.onSurface,
             unfocusedBorderColor = colors.border,
             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
             errorBorderColor = MaterialTheme.colorScheme.error,
-            cursorColor = colors.accent,
-            focusedLabelColor = colors.accent,
+            cursorColor = MaterialTheme.colorScheme.onSurface,
+            focusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
         ),
     )
 }
@@ -334,14 +325,14 @@ fun GymSearchField(
     val colors = SquadGymTheme.colors
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.surfaceContainer,
         border = androidx.compose.foundation.BorderStroke(1.dp, colors.border),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(52.dp)
+                .height(50.dp)
                 .padding(horizontal = Spacing.md),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -395,13 +386,13 @@ fun FilterChip(
     val colors = SquadGymTheme.colors
     Surface(
         modifier = modifier
-            .height(36.dp)
+            .height(34.dp)
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
-        color = if (selected) colors.accent.copy(alpha = 0.16f) else MaterialTheme.colorScheme.surfaceContainer,
+        shape = RoundedCornerShape(17.dp),
+        color = if (selected) MaterialTheme.colorScheme.onSurface else Color.Transparent,
         border = androidx.compose.foundation.BorderStroke(
             1.dp,
-            if (selected) colors.accent.copy(alpha = 0.65f) else colors.border,
+            if (selected) Color.Transparent else colors.border,
         ),
     ) {
         Row(
@@ -411,7 +402,7 @@ fun FilterChip(
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelMedium,
-                color = if (selected) colors.accent else MaterialTheme.colorScheme.onSurfaceVariant,
+                color = if (selected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -420,7 +411,7 @@ fun FilterChip(
                 Icon(
                     trailingIcon,
                     contentDescription = null,
-                    tint = if (selected) colors.accent else MaterialTheme.colorScheme.onSurfaceVariant,
+                    tint = if (selected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(16.dp),
                 )
             }
@@ -440,8 +431,8 @@ fun FilterDropdown(
     val colors = SquadGymTheme.colors
     Box(modifier = modifier) {
         Surface(
-            modifier = Modifier.height(36.dp).clickable { expanded = true },
-            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier.height(34.dp).clickable { expanded = true },
+            shape = RoundedCornerShape(17.dp),
             color = MaterialTheme.colorScheme.surfaceContainer,
             border = androidx.compose.foundation.BorderStroke(1.dp, colors.border),
         ) {
@@ -491,9 +482,8 @@ fun SegmentedControl(
     val colors = SquadGymTheme.colors
     Surface(
         modifier = modifier.fillMaxWidth().height(44.dp),
-        shape = RoundedCornerShape(14.dp),
-        color = MaterialTheme.colorScheme.surfaceContainer,
-        border = androidx.compose.foundation.BorderStroke(1.dp, colors.border),
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant,
     ) {
         Row(modifier = Modifier.fillMaxSize().padding(4.dp)) {
             options.forEachIndexed { index, option ->
@@ -502,16 +492,16 @@ fun SegmentedControl(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxSize()
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(if (selected) colors.accent else Color.Transparent)
+                        .clip(RoundedCornerShape(9.dp))
+                        .background(if (selected) MaterialTheme.colorScheme.surface else Color.Transparent)
                         .clickable { onSelect(index) },
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = option,
                         style = MaterialTheme.typography.labelMedium,
-                        fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
-                        color = if (selected) colors.accentInk else MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+                        color = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
@@ -547,12 +537,12 @@ fun PillTabs(
             val selected = index == selectedIndex
             val colors = SquadGymTheme.colors
             Surface(
-                modifier = Modifier.weight(1f).height(38.dp).clickable { onSelect(index) },
-                shape = RoundedCornerShape(12.dp),
-                color = if (selected) colors.accent else MaterialTheme.colorScheme.surfaceContainer,
+                modifier = Modifier.weight(1f).height(36.dp).clickable { onSelect(index) },
+                shape = RoundedCornerShape(18.dp),
+                color = if (selected) MaterialTheme.colorScheme.onSurface else Color.Transparent,
                 border = androidx.compose.foundation.BorderStroke(
                     1.dp,
-                    if (selected) colors.accent else colors.border,
+                    if (selected) Color.Transparent else colors.border,
                 ),
             ) {
                 Row(
@@ -563,8 +553,8 @@ fun PillTabs(
                     Text(
                         text = tab,
                         style = MaterialTheme.typography.labelMedium,
-                        fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
-                        color = if (selected) colors.accentInk else MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+                        color = if (selected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                     )
                     val count = counts.getOrNull(index)
@@ -573,7 +563,7 @@ fun PillTabs(
                         Text(
                             text = count.toString(),
                             style = MaterialTheme.typography.labelSmall,
-                            color = if (selected) colors.accentInk.copy(alpha = 0.75f) else MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = if (selected) MaterialTheme.colorScheme.surface.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }

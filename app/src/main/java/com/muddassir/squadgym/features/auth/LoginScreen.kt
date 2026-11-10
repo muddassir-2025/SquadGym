@@ -16,10 +16,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,7 +30,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.muddassir.squadgym.BuildConfig
@@ -46,8 +43,6 @@ import com.muddassir.squadgym.core.ui.components.ScreenBackground
 import com.muddassir.squadgym.core.ui.components.SecondaryButton
 import com.muddassir.squadgym.core.ui.components.SpacerH
 import com.muddassir.squadgym.core.ui.components.Tone
-import com.muddassir.squadgym.core.ui.theme.Spacing
-import com.muddassir.squadgym.core.ui.theme.SquadGymTheme
 
 @Composable
 fun LoginScreen(
@@ -59,7 +54,6 @@ fun LoginScreen(
         factory = vmFactory { LoginViewModel(container.authRepository) },
     )
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val colors = SquadGymTheme.colors
 
     ScreenBackground {
         Column(
@@ -67,68 +61,66 @@ fun LoginScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .imePadding()
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 28.dp),
         ) {
-            Spacer(Modifier.height(64.dp))
+            Spacer(Modifier.height(72.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
-                        .size(46.dp)
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(colors.accent),
+                        .size(42.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colorScheme.onSurface),
                     contentAlignment = Alignment.Center,
                 ) {
                     Icon(
                         Icons.Filled.FitnessCenter,
                         contentDescription = null,
-                        tint = colors.accentInk,
-                        modifier = Modifier.size(24.dp),
+                        tint = MaterialTheme.colorScheme.background,
+                        modifier = Modifier.size(20.dp),
                     )
                 }
-                Spacer(Modifier.size(12.dp))
+                Spacer(Modifier.size(14.dp))
                 Column {
                     Text(
-                        text = "SQUADGYM",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Black,
-                        letterSpacing = 2.5.sp,
+                        text = "SquadGym",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onBackground,
                     )
                     Text(
                         text = "Gym management",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
 
-            Spacer(Modifier.height(44.dp))
+            Spacer(Modifier.height(64.dp))
             Text(
-                text = "Welcome\nback.",
-                style = MaterialTheme.typography.displayMedium,
+                text = "Welcome back",
+                style = MaterialTheme.typography.displaySmall,
                 color = MaterialTheme.colorScheme.onBackground,
             )
-            SpacerH(10.dp)
+            SpacerH(12.dp)
             Text(
                 text = "Sign in to see today's floor, mark attendance and keep memberships moving.",
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
-            Spacer(Modifier.height(30.dp))
+            Spacer(Modifier.height(40.dp))
 
             GymTextField(
                 value = state.email,
                 onValueChange = viewModel::onEmailChange,
-                label = "Email address",
+                label = "Email",
                 placeholder = "you@gym.com",
                 error = state.emailError,
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next,
-                leadingIcon = Icons.Filled.Email,
             )
-            SpacerH(14.dp)
+            SpacerH(18.dp)
             GymTextField(
                 value = state.password,
                 onValueChange = viewModel::onPasswordChange,
@@ -148,11 +140,11 @@ fun LoginScreen(
             }
 
             if (state.error != null) {
-                SpacerH(4.dp)
+                SpacerH(8.dp)
                 InfoBanner(text = state.error!!, icon = Icons.Filled.MailOutline, tone = Tone.Danger)
             }
 
-            SpacerH(16.dp)
+            SpacerH(20.dp)
             PrimaryButton(
                 text = "Sign in",
                 onClick = viewModel::submit,
@@ -160,32 +152,21 @@ fun LoginScreen(
                 enabled = !state.loading,
             )
 
-            Spacer(Modifier.height(26.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                HorizontalDivider(modifier = Modifier.weight(1f), color = colors.border)
-                Text(
-                    text = "  INVITATION ONLY  ",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    letterSpacing = 1.2.sp,
-                )
-                HorizontalDivider(modifier = Modifier.weight(1f), color = colors.border)
-            }
-            Spacer(Modifier.height(18.dp))
+            Spacer(Modifier.height(48.dp))
 
             Text(
-                text = "Members are added by gym staff. Use the invitation email to activate your account.",
-                style = MaterialTheme.typography.bodySmall,
+                text = "Members join by invitation from gym staff.",
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            SpacerH(10.dp)
+            SpacerH(14.dp)
             SecondaryButton(
                 text = "I have an invitation",
                 onClick = onAcceptInvitation,
                 icon = Icons.Filled.MailOutline,
             )
 
-            Spacer(Modifier.height(36.dp))
+            Spacer(Modifier.height(40.dp))
 
             if (BuildConfig.DEBUG) {
                 InfoBanner(
@@ -193,7 +174,7 @@ fun LoginScreen(
                     icon = Icons.Filled.FitnessCenter,
                     tone = Tone.Neutral,
                 )
-                Spacer(Modifier.height(20.dp))
+                Spacer(Modifier.height(24.dp))
             }
 
             Text(
@@ -202,7 +183,7 @@ fun LoginScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.fillMaxWidth(),
             )
-            Spacer(Modifier.height(28.dp))
+            Spacer(Modifier.height(32.dp))
         }
     }
 }

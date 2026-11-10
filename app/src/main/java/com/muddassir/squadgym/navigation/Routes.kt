@@ -18,6 +18,7 @@ object Routes {
     const val MEMBER_EDIT = "member/{memberId}/edit"
     const val LEADERBOARD = "leaderboard"
     const val PROFILE = "profile"
+    const val PLANS = "plans"
 
     // Member
     const val MEMBER_HOME = "home"

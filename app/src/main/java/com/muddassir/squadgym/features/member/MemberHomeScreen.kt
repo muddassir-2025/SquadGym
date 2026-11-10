@@ -76,15 +76,15 @@ fun MemberHomeScreen(
     ScreenBackground {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 32.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
+            contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 28.dp, bottom = 40.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             item {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "Welcome back,",
-                            style = MaterialTheme.typography.bodySmall,
+                            text = "Welcome back",
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Text(
@@ -127,21 +127,6 @@ fun MemberHomeScreen(
                         val membership = data.membership
                         GymCard {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(40.dp)
-                                        .clip(RoundedCornerShape(12.dp))
-                                        .background(colors.accent.copy(alpha = 0.16f)),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    Icon(
-                                        Icons.Filled.FitnessCenter,
-                                        contentDescription = null,
-                                        tint = colors.accent,
-                                        modifier = Modifier.size(20.dp),
-                                    )
-                                }
-                                Spacer(Modifier.width(10.dp))
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
                                         text = membership?.planName?.takeIf { it.isNotBlank() } ?: "No active plan",
@@ -189,29 +174,31 @@ fun MemberHomeScreen(
                     }
 
                     item {
-                        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             StatTile(
                                 label = "In gym now",
                                 value = data.stats.inGymNow.value,
                                 icon = Icons.Filled.FitnessCenter,
                                 comparison = null,
                                 highlight = true,
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier.fillMaxWidth(),
                             )
-                            StatTile(
-                                label = "Members",
-                                value = data.stats.totalMembers.value,
-                                icon = Icons.Filled.Groups,
-                                comparison = data.stats.totalMembers.comparison,
-                                modifier = Modifier.weight(1f),
-                            )
-                            StatTile(
-                                label = "Today",
-                                value = data.stats.todayAttendance.value,
-                                icon = Icons.Filled.CheckCircle,
-                                comparison = data.stats.todayAttendance.comparison,
-                                modifier = Modifier.weight(1f),
-                            )
+                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                StatTile(
+                                    label = "Members",
+                                    value = data.stats.totalMembers.value,
+                                    icon = Icons.Filled.Groups,
+                                    comparison = data.stats.totalMembers.comparison,
+                                    modifier = Modifier.weight(1f),
+                                )
+                                StatTile(
+                                    label = "Today",
+                                    value = data.stats.todayAttendance.value,
+                                    icon = Icons.Filled.CheckCircle,
+                                    comparison = data.stats.todayAttendance.comparison,
+                                    modifier = Modifier.weight(1f),
+                                )
+                            }
                         }
                     }
 
@@ -270,17 +257,13 @@ fun MemberHomeScreen(
                                     modifier = Modifier
                                         .size(44.dp)
                                         .clip(RoundedCornerShape(14.dp))
-                                        .background(
-                                            Brush.linearGradient(
-                                                listOf(colors.warning.copy(alpha = 0.3f), colors.warning.copy(alpha = 0.1f)),
-                                            ),
-                                        ),
+                                        .background(MaterialTheme.colorScheme.surfaceVariant),
                                     contentAlignment = Alignment.Center,
                                 ) {
                                     Icon(
                                         Icons.Filled.EmojiEvents,
                                         contentDescription = null,
-                                        tint = colors.warning,
+                                        tint = MaterialTheme.colorScheme.onSurface,
                                         modifier = Modifier.size(22.dp),
                                     )
                                 }
@@ -407,23 +390,16 @@ private fun MetricBox(
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
-            Icon(
-                icon,
-                contentDescription = null,
-                tint = SquadGymTheme.colors.accent,
-                modifier = Modifier.size(15.dp),
-            )
-            Spacer(Modifier.height(6.dp))
-            Text(
-                text = value,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = value,
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface,
             )
         }
     }

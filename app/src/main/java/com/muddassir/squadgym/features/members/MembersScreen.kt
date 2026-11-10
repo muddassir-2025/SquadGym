@@ -79,8 +79,8 @@ fun MembersScreen(
     ScreenBackground {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 32.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 40.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             item {
                 ScreenHeader(
@@ -89,14 +89,14 @@ fun MembersScreen(
                     actions = {
                         Surface(
                             modifier = Modifier.size(40.dp).clickable(onClick = onAddMember),
-                            shape = RoundedCornerShape(13.dp),
-                            color = colors.accent,
+                            shape = RoundedCornerShape(12.dp),
+                            color = MaterialTheme.colorScheme.onSurface,
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     Icons.Filled.PersonAdd,
                                     contentDescription = "Add member",
-                                    tint = colors.accentInk,
+                                    tint = MaterialTheme.colorScheme.background,
                                     modifier = Modifier.size(20.dp),
                                 )
                             }
@@ -276,7 +276,7 @@ private fun MemberCard(
     onClick: () -> Unit,
 ) {
     val colors = SquadGymTheme.colors
-    GymCard(padding = 12.dp, onClick = onClick) {
+    GymCard(padding = 16.dp, onClick = onClick) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             MemberAvatar(
                 photoUrl = member.photoUrl,

@@ -90,4 +90,8 @@ class AdminRepository(
 
     suspend fun updatePlan(planId: String, request: PlanPatchRequest): ApiResult<PlanDto> =
         caller.call { api.updatePlan(planId, request) }
+
+    /** Hides a plan without touching memberships that already reference it. */
+    suspend fun removePlan(planId: String): ApiResult<PlanDto> =
+        caller.call { api.removePlan(planId) }
 }

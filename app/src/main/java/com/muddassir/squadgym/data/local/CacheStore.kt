@@ -57,6 +57,10 @@ class CacheStore(
     suspend fun cachedMember(memberId: String): MemberDto? = dao.member(memberId)?.toDto()
 
     suspend fun cachePlans(plans: List<PlanDto>) {
+        if (plans.isEmpty()) {
+            dao.clearPlans()
+            return
+        }
         dao.upsertPlans(
             plans.map {
                 CachedPlanEntity(
@@ -67,9 +71,12 @@ class CacheStore(
                     currency = it.currency,
                     isActive = it.isActive,
                     sortOrder = it.sortOrder,
+                    description = it.description,
                 )
             },
         )
+        // Drop plans the server no longer returns so offline lists stay truthful.
+        dao.deletePlansExcept(plans.map { it.id })
     }
 
     suspend fun cachedPlans(): List<PlanDto> = dao.plans().map {
@@ -81,6 +88,7 @@ class CacheStore(
             currency = it.currency,
             isActive = it.isActive,
             sortOrder = it.sortOrder,
+            description = it.description,
         )
     }
 

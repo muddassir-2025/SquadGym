@@ -27,32 +27,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.muddassir.squadgym.core.ui.theme.SquadGymTheme
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen() {
-    val colors = SquadGymTheme.colors
     var visible by remember { mutableStateOf(false) }
     val alpha by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
-        animationSpec = tween(520),
+        animationSpec = tween(420),
         label = "splash alpha",
     )
 
     LaunchedEffect(Unit) {
-        delay(120)
+        delay(80)
         visible = true
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(colors.gradientTop, MaterialTheme.colorScheme.background))),
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -61,42 +57,33 @@ fun SplashScreen() {
         ) {
             Box(
                 modifier = Modifier
-                    .size(84.dp)
-                    .clip(RoundedCornerShape(26.dp))
-                    .background(colors.accent),
+                    .size(64.dp)
+                    .clip(RoundedCornerShape(18.dp))
+                    .background(MaterialTheme.colorScheme.onSurface),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     Icons.Filled.FitnessCenter,
                     contentDescription = null,
-                    tint = colors.accentInk,
-                    modifier = Modifier.size(42.dp),
+                    tint = MaterialTheme.colorScheme.background,
+                    modifier = Modifier.size(30.dp),
                 )
             }
-            Spacer(Modifier.height(26.dp))
+            Spacer(Modifier.height(24.dp))
             Text(
-                text = "SQUAD",
-                style = MaterialTheme.typography.displayMedium,
-                fontWeight = FontWeight.Black,
-                letterSpacing = 8.sp,
+                text = "SquadGym",
+                style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onBackground,
             )
-            Text(
-                text = "GYM",
-                style = MaterialTheme.typography.displayMedium,
-                fontWeight = FontWeight.Black,
-                letterSpacing = 18.sp,
-                color = colors.accent,
-            )
-            Spacer(Modifier.height(34.dp))
+            Spacer(Modifier.height(28.dp))
             CircularProgressIndicator(
-                color = colors.accent,
+                color = SquadGymTheme.colors.accent,
                 strokeWidth = 2.dp,
-                modifier = Modifier.size(22.dp),
+                modifier = Modifier.size(20.dp),
             )
         }
         Column(
-            modifier = Modifier.align(Alignment.BottomCenter).height(80.dp),
+            modifier = Modifier.align(Alignment.BottomCenter).height(88.dp),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -105,7 +92,7 @@ fun SplashScreen() {
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            Spacer(Modifier.height(28.dp))
+            Spacer(Modifier.height(32.dp))
         }
     }
 }

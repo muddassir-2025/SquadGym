@@ -86,8 +86,8 @@ fun AdminTeamScreen(
     ScreenBackground {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 32.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 40.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             item {
                 ScreenHeader(
@@ -96,14 +96,14 @@ fun AdminTeamScreen(
                     actions = {
                         Surface(
                             modifier = Modifier.size(40.dp).clickable(onClick = onAddAdmin),
-                            shape = RoundedCornerShape(13.dp),
-                            color = SquadGymTheme.colors.accent,
+                            shape = RoundedCornerShape(12.dp),
+                            color = MaterialTheme.colorScheme.onSurface,
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     Icons.Filled.PersonAdd,
                                     contentDescription = "Create admin",
-                                    tint = SquadGymTheme.colors.accentInk,
+                                    tint = MaterialTheme.colorScheme.background,
                                     modifier = Modifier.size(20.dp),
                                 )
                             }

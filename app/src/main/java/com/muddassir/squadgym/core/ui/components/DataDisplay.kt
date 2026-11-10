@@ -69,7 +69,7 @@ fun StatusPill(
     val (foreground, background) = toneColors(tone)
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(6.dp),
         color = if (tone == Tone.Accent) SquadGymTheme.colors.accent else background,
     ) {
         Row(
@@ -144,45 +144,34 @@ fun StatTile(
     val colors = SquadGymTheme.colors
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(20.dp),
-        color = if (highlight) colors.accent.copy(alpha = 0.10f) else MaterialTheme.colorScheme.surfaceContainer,
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            if (highlight) colors.accent.copy(alpha = 0.35f) else colors.border,
-        ),
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surfaceContainer,
+        border = androidx.compose.foundation.BorderStroke(1.dp, colors.border),
     ) {
-        Column(modifier = Modifier.padding(14.dp)) {
+        Column(modifier = Modifier.padding(20.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(26.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(if (highlight) colors.accent.copy(alpha = 0.18f) else colors.neutralTint),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        icon,
-                        contentDescription = null,
-                        tint = if (highlight) colors.accent else MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(15.dp),
-                    )
-                }
-                Spacer(Modifier.width(6.dp))
                 Text(
                     text = label,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f),
+                )
+                Icon(
+                    icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                    modifier = Modifier.size(16.dp),
                 )
             }
-            Spacer(Modifier.height(10.dp))
+            Spacer(Modifier.height(16.dp))
             Text(
                 text = value.toString(),
                 style = MaterialTheme.typography.displaySmall,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = if (highlight) colors.accent else MaterialTheme.colorScheme.onSurface,
             )
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height(8.dp))
             if (comparison != null) {
                 ComparisonIndicator(comparison)
             } else {
@@ -253,36 +242,16 @@ fun ValueRow(
 @Composable
 fun RankBadge(rank: Int, modifier: Modifier = Modifier) {
     val colors = SquadGymTheme.colors
-    if (rank in 1..3) {
-        val tint = when (rank) {
-            1 -> colors.warning
-            2 -> MaterialTheme.colorScheme.onSurfaceVariant
-            else -> Color(0xFFC98A4B)
-        }
-        Box(
-            modifier = modifier
-                .size(34.dp)
-                .clip(CircleShape)
-                .background(tint.copy(alpha = 0.16f)),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(Icons.Filled.EmojiEvents, contentDescription = "Rank $rank", tint = tint, modifier = Modifier.size(18.dp))
-        }
-    } else {
-        Box(
-            modifier = modifier
-                .size(34.dp)
-                .clip(CircleShape)
-                .background(SquadGymTheme.colors.neutralTint),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                text = rank.toString(),
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
+    Box(
+        modifier = modifier.size(30.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = rank.toString(),
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = if (rank in 1..3) FontWeight.SemiBold else FontWeight.Normal,
+            color = if (rank in 1..3) colors.accent else MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 
@@ -300,8 +269,8 @@ fun UndoBanner(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        border = androidx.compose.foundation.BorderStroke(1.dp, colors.accent.copy(alpha = 0.35f)),
-        shadowElevation = 8.dp,
+        border = androidx.compose.foundation.BorderStroke(1.dp, colors.border),
+        shadowElevation = 6.dp,
     ) {
         Row(
             modifier = Modifier.padding(start = Spacing.md, end = 4.dp, top = 10.dp, bottom = 10.dp),
@@ -361,8 +330,8 @@ fun ProgressBar(progress: Float, modifier: Modifier = Modifier) {
         progress = { animated },
         modifier = modifier
             .fillMaxWidth()
-            .height(6.dp)
-            .clip(RoundedCornerShape(3.dp)),
+            .height(4.dp)
+            .clip(RoundedCornerShape(2.dp)),
         color = SquadGymTheme.colors.accent,
         trackColor = SquadGymTheme.colors.neutralTint,
         drawStopIndicator = {},
@@ -381,11 +350,11 @@ fun InfoBanner(
     val (foreground, background) = toneColors(tone)
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(12.dp),
         color = background,
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(icon, contentDescription = null, tint = foreground, modifier = Modifier.size(18.dp))

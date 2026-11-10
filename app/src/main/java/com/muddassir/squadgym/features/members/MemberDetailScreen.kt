@@ -103,8 +103,8 @@ fun MemberDetailScreen(
         Box(modifier = Modifier.fillMaxSize()) {
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 120.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp),
+                contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 120.dp),
+                verticalArrangement = Arrangement.spacedBy(18.dp),
             ) {
                 item {
                     ScreenHeader(
@@ -400,7 +400,7 @@ private fun MembershipCard(member: MemberDto, membership: MembershipDto?, onRene
                     .height(44.dp)
                     .clickable(onClick = onRenew),
                 shape = RoundedCornerShape(12.dp),
-                color = colors.accent,
+                color = MaterialTheme.colorScheme.onSurface,
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -410,7 +410,7 @@ private fun MembershipCard(member: MemberDto, membership: MembershipDto?, onRene
                     Icon(
                         Icons.Filled.WorkspacePremium,
                         contentDescription = null,
-                        tint = colors.accentInk,
+                        tint = MaterialTheme.colorScheme.surface,
                         modifier = Modifier.size(17.dp),
                     )
                     Spacer(Modifier.width(6.dp))
@@ -418,7 +418,7 @@ private fun MembershipCard(member: MemberDto, membership: MembershipDto?, onRene
                         text = "Renew membership",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold,
-                        color = colors.accentInk,
+                        color = MaterialTheme.colorScheme.surface,
                     )
                 }
             }

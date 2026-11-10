@@ -28,6 +28,7 @@ import com.muddassir.squadgym.features.members.MemberDetailScreen
 import com.muddassir.squadgym.features.members.MemberFormScreen
 import com.muddassir.squadgym.features.members.MembersScreen
 import com.muddassir.squadgym.features.profile.ProfileScreen
+import com.muddassir.squadgym.features.settings.PlansScreen
 import com.muddassir.squadgym.features.superadmin.AdminFormScreen
 import com.muddassir.squadgym.features.superadmin.AdminTeamScreen
 import com.muddassir.squadgym.features.superadmin.AuditLogScreen
@@ -54,7 +55,7 @@ fun AppNavHost(
     }
 
     Scaffold(
-        containerColor = Color.Transparent,
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             if (currentRoute != null && topLevelRoutes.contains(currentRoute)) {
                 SquadBottomBar(
@@ -80,6 +81,8 @@ fun AppNavHost(
                         onAddMember = { navController.navigate(Routes.MEMBER_NEW) },
                         onViewMembers = { navigateTopLevel(Routes.MEMBERS) },
                         onLeaderboard = { navigateTopLevel(Routes.LEADERBOARD) },
+                        onOpenPlans = { navController.navigate(Routes.PLANS) },
+                        onOpenGymSettings = { navController.navigate(Routes.GYM_SETTINGS) },
                     )
                 } else {
                     NotAvailable()
@@ -227,6 +230,18 @@ fun AppNavHost(
                     AuditLogScreen(
                         container = container,
                         timezone = session.gym.timezone,
+                        onBack = { navController.popBackStack() },
+                    )
+                } else {
+                    NotAvailable()
+                }
+            }
+
+            composable(Routes.PLANS) {
+                if (session.user.isStaff) {
+                    PlansScreen(
+                        container = container,
+                        canManage = session.user.hasPermission("memberships.manage"),
                         onBack = { navController.popBackStack() },
                     )
                 } else {

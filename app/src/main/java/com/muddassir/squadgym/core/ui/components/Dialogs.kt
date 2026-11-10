@@ -89,7 +89,7 @@ fun OptionsDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-        shape = androidx.compose.foundation.shape.RoundedCornerShape(22.dp),
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(18.dp),
         title = { Text(title, style = MaterialTheme.typography.titleLarge) },
         text = {
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
@@ -142,7 +142,7 @@ fun DateRangeDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-        shape = androidx.compose.foundation.shape.RoundedCornerShape(22.dp),
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(18.dp),
         title = { Text("Custom range", style = MaterialTheme.typography.titleLarge) },
         text = {
             Column {

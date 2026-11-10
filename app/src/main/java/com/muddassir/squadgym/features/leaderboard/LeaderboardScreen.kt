@@ -65,8 +65,8 @@ fun LeaderboardScreen(container: AppContainer) {
     ScreenBackground {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 32.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
+            contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 40.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp),
         ) {
             item {
                 ScreenHeader(
@@ -76,8 +76,8 @@ fun LeaderboardScreen(container: AppContainer) {
                         Icon(
                             Icons.Filled.EmojiEvents,
                             contentDescription = null,
-                            tint = SquadGymTheme.colors.warning,
-                            modifier = Modifier.size(24.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(22.dp),
                         )
                     },
                 )
@@ -160,19 +160,12 @@ fun LeaderboardScreen(container: AppContainer) {
 @Composable
 private fun PodiumCard(entry: LeaderboardEntryDto, height: androidx.compose.ui.unit.Dp, modifier: Modifier = Modifier) {
     val colors = SquadGymTheme.colors
-    val tint = when (entry.rank) {
-        1 -> colors.warning
-        2 -> colors.accent
-        else -> colors.danger.copy(alpha = 0.7f)
-    }
+    val tint = if (entry.rank == 1) colors.accent else MaterialTheme.colorScheme.onSurfaceVariant
     Surface(
         modifier = modifier.height(height),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(16.dp),
         color = MaterialTheme.colorScheme.surfaceContainer,
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            if (entry.rank == 1) colors.warning.copy(alpha = 0.5f) else colors.border,
-        ),
+        border = androidx.compose.foundation.BorderStroke(1.dp, colors.border),
     ) {
         Column(
             modifier = Modifier.padding(8.dp).fillMaxWidth(),
@@ -212,15 +205,12 @@ private fun LeaderboardRow(entry: LeaderboardEntryDto, data: LeaderboardDto) {
     val colors = SquadGymTheme.colors
     Surface(
         shape = RoundedCornerShape(16.dp),
-        color = if (entry.isMe) colors.accent.copy(alpha = 0.10f) else MaterialTheme.colorScheme.surfaceContainer,
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            if (entry.isMe) colors.accent.copy(alpha = 0.4f) else colors.border,
-        ),
+        color = if (entry.isMe) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surfaceContainer,
+        border = androidx.compose.foundation.BorderStroke(1.dp, colors.border),
         modifier = Modifier.fillMaxWidth(),
     ) {
         Row(
-            modifier = Modifier.padding(10.dp),
+            modifier = Modifier.padding(14.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             RankBadge(entry.rank)
@@ -270,20 +260,14 @@ private fun LeaderboardRow(entry: LeaderboardEntryDto, data: LeaderboardDto) {
 private fun MyRankCard(rank: Int, score: Int, totalMembers: Int, streak: Int) {
     val colors = SquadGymTheme.colors
     Surface(
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth(),
-        color = androidx.compose.ui.graphics.Color.Transparent,
+        color = MaterialTheme.colorScheme.surfaceVariant,
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(18.dp))
-                .background(
-                    Brush.horizontalGradient(
-                        listOf(colors.accent.copy(alpha = 0.22f), colors.accent.copy(alpha = 0.06f)),
-                    ),
-                )
-                .padding(14.dp),
+                .padding(18.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(1f)) {

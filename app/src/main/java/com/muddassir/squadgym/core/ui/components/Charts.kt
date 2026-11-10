@@ -102,20 +102,16 @@ fun BarChart(
                 val top = chartHeight - barHeight
                 val isSelected = selected == index
                 val base = when {
-                    !point.isGymOpen -> colors.chartBarMuted.copy(alpha = 0.45f)
+                    !point.isGymOpen -> colors.chartBarMuted.copy(alpha = 0.5f)
                     isSelected -> colors.chartBar
-                    else -> colors.chartBar.copy(alpha = 0.42f)
+                    else -> colors.chartBar.copy(alpha = 0.35f)
                 }
 
                 drawRoundRect(
-                    brush = Brush.verticalGradient(
-                        listOf(base, base.copy(alpha = if (isSelected) 0.85f else 0.55f)),
-                        startY = top,
-                        endY = chartHeight,
-                    ),
+                    color = base,
                     topLeft = Offset(left, top),
                     size = Size(barWidth, barHeight),
-                    cornerRadius = CornerRadius(barWidth / 2.2f, barWidth / 2.2f),
+                    cornerRadius = CornerRadius(barWidth / 3f, barWidth / 3f),
                 )
             }
         }
@@ -131,7 +127,7 @@ fun BarChart(
                 Text(
                     text = if (show) point.weekday.ifBlank { point.label } else "",
                     style = MaterialTheme.typography.labelSmall,
-                    color = if (selected == index) colors.accent else MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = if (selected == index) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.weight(1f),
                     maxLines = 1,
@@ -153,7 +149,7 @@ fun MiniTrendBars(values: List<Int>, modifier: Modifier = Modifier, height: Dp =
         values.forEachIndexed { index, value ->
             val barHeight = (size.height * (value / max.toFloat())).coerceAtLeast(2f)
             drawRoundRect(
-                color = if (value > 0) colors.accent.copy(alpha = 0.85f) else colors.chartBarMuted,
+                color = if (value > 0) colors.chartBar else colors.chartBarMuted,
                 topLeft = Offset(index * gap + (gap - barWidth) / 2f, size.height - barHeight),
                 size = Size(barWidth, barHeight),
                 cornerRadius = CornerRadius(barWidth / 2f, barWidth / 2f),

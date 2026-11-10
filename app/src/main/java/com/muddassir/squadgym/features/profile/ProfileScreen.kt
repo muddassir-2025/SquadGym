@@ -79,8 +79,8 @@ fun ProfileScreen(
     ScreenBackground {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 36.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
+            contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 40.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             item { ScreenHeader(title = "Profile", subtitle = "Account and preferences") }
 
@@ -152,12 +152,6 @@ fun ProfileScreen(
                             }
                         },
                     )
-                    SpacerH(10.dp)
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Pill("System", Icons.Filled.Smartphone, themeMode == SettingsStore.ThemeMode.SYSTEM)
-                        Pill("Light", Icons.Filled.LightMode, themeMode == SettingsStore.ThemeMode.LIGHT)
-                        Pill("Dark", Icons.Filled.DarkMode, themeMode == SettingsStore.ThemeMode.DARK)
-                    }
                 }
             }
 
@@ -239,9 +233,8 @@ fun ProfileScreen(
             item {
                 Text(
                     text = "Session tokens are stored in the Android Keystore and cleared on sign-out.",
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 10.sp,
                 )
             }
         }
@@ -268,7 +261,7 @@ private fun AdminRow(icon: ImageVector, title: String, subtitle: String, onClick
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(horizontal = 20.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Surface(
@@ -301,29 +294,3 @@ private fun AdminRow(icon: ImageVector, title: String, subtitle: String, onClick
     }
 }
 
-@Composable
-private fun Pill(label: String, icon: ImageVector, active: Boolean) {
-    Surface(
-        shape = androidx.compose.foundation.shape.RoundedCornerShape(10.dp),
-        color = if (active) SquadGymTheme.colors.accent.copy(alpha = 0.16f)
-        else MaterialTheme.colorScheme.surfaceContainerHigh,
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                icon,
-                contentDescription = null,
-                tint = if (active) SquadGymTheme.colors.accent else MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(12.dp),
-            )
-            Spacer(Modifier.width(4.dp))
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelSmall,
-                color = if (active) SquadGymTheme.colors.accent else MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-    }
-}

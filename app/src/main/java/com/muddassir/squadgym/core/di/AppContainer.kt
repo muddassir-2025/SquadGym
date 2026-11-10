@@ -67,7 +67,14 @@ class AppContainer(appContext: Context) {
     val cacheStore: CacheStore by lazy { CacheStore(database, json) }
     private val apiCaller: ApiCaller by lazy { ApiCaller(json, sessionManager) }
 
-    private val baseUrl: String = BuildConfig.API_BASE_URL.let { if (it.endsWith("/")) it else "$it/" }
+    /**
+     * `API_BASE_URL` is the server root (`https://host/`, `http://10.0.2.2:8080/`); every
+     * endpoint path below is relative to the versioned API, so append `/api/v1/` once here.
+     * Tolerates a base URL that already includes the prefix.
+     */
+    private val baseUrl: String = BuildConfig.API_BASE_URL
+        .let { if (it.endsWith("/")) it else "$it/" }
+        .let { if (it.endsWith("api/v1/")) it else "${it}api/v1/" }
 
     private val logging = HttpLoggingInterceptor().apply {
         level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BASIC else HttpLoggingInterceptor.Level.NONE
