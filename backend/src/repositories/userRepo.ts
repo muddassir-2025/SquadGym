@@ -173,12 +173,19 @@ const MEMBER_SELECT = `
 
 function scoredCte(scoreFrom: string, scoreTo: string): string {
   // $4 / $5 are the score window parameters.
+  // `request_params` exists so every fixed parameter is typed even when a query
+  // variant (e.g. the unfiltered count) does not reference it directly.
+  void scoreFrom;
+  void scoreTo;
   return `with scored as (
     select a.member_id, count(*)::int as score
     from attendance a
     where a.gym_id = $1 and a.status = 'active'
       and a.attendance_date between $4::date and $5::date
     group by a.member_id
+  ), request_params as (
+    select $2::date as today, $3::int as expiring_days,
+           $4::date as score_from, $5::date as score_to
   )`;
 }
 
@@ -307,18 +314,18 @@ export async function listMembers(
   return { items, total: countRow?.total ?? 0 };
 }
 
-export async function getMember(gymId: string, memberId: string): Promise<MemberRow | null> {
+export async function getMember(gymId: string, memberId: string, today: string): Promise<MemberRow | null> {
   return queryOne<MemberRow>(
     `with scored as (
        select a.member_id, count(*)::int as score
        from attendance a
        where a.gym_id = $1 and a.status = 'active'
-         and a.attendance_date between date_trunc('month', $2::date)::date and $2::date
+         and a.attendance_date between date_trunc('month', $3::date)::date and $3::date
        group by a.member_id
      )
      ${MEMBER_SELECT}
      where u.gym_id = $1 and u.id = $2 and u.role = 'member'`,
-    [gymId, memberId],
+    [gymId, memberId, today],
   );
 }
 

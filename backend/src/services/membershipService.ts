@@ -46,7 +46,7 @@ export async function previewRenewal(
   if (!plan || !plan.is_active) {
     throw AppError.validation({ planId: 'Choose an active membership plan.' });
   }
-  const member = await getMember(gym.id, memberId);
+  const member = await getMember(gym.id, memberId, today);
   if (!member) throw AppError.notFound('Member');
   const current = await getCurrentMembership(memberId);
   const dates = computeRenewalDates({
@@ -282,7 +282,8 @@ export async function membershipHistory(
   memberId: string,
 ): Promise<MembershipHistoryItemDto[]> {
   const gym = await requireGym(auth.gymId);
-  const member = await getMember(gym.id, memberId);
+  const today = todayIn(gym.timezone);
+  const member = await getMember(gym.id, memberId, today);
   if (!member) throw AppError.notFound('Member');
 
   const [rows, renewals] = await Promise.all([listMembershipHistory(memberId), listRenewals(memberId, 50)]);

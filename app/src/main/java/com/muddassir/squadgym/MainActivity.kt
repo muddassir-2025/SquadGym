@@ -1,47 +1,59 @@
 package com.muddassir.squadgym
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.muddassir.squadgym.ui.theme.SquadGymTheme
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.muddassir.squadgym.core.di.AppContainer
+import com.muddassir.squadgym.core.ui.theme.SquadGymTheme
+import com.muddassir.squadgym.data.local.SettingsStore
+import com.muddassir.squadgym.navigation.SquadGymRoot
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var container: AppContainer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        container = (application as SquadGymApp).container
+        handleIntent(intent)
+
         setContent {
-            SquadGymTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+            val themeMode by container.settingsStore.themeMode
+                .collectAsStateWithLifecycle(initialValue = SettingsStore.ThemeMode.SYSTEM)
+
+            val darkTheme = when (themeMode) {
+                SettingsStore.ThemeMode.LIGHT -> false
+                SettingsStore.ThemeMode.DARK -> true
+                SettingsStore.ThemeMode.SYSTEM -> isSystemInDarkTheme()
+            }
+
+            SquadGymTheme(darkTheme = darkTheme) {
+                SquadGymRoot(container = container)
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SquadGymTheme {
-        Greeting("Android")
+    /** `squadgym://invite/<token>` opens the invitation acceptance screen. */
+    private fun handleIntent(intent: Intent?) {
+        val data = intent?.data ?: return
+        if (data.scheme != "squadgym") return
+        val token = when (data.host) {
+            "invite" -> data.lastPathSegment ?: data.getQueryParameter("token")
+            else -> data.getQueryParameter("token")
+        }
+        if (!token.isNullOrBlank()) {
+            container.pendingInviteToken.value = token
+        }
     }
 }

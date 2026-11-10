@@ -1,14 +1,16 @@
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { closePool, pool, withTransaction } from './pool';
+import type { PoolClient } from 'pg';
+import { closePool, withTransaction } from './pool';
 import { logger } from '../utils/logger';
 
 /**
  * Minimal, deterministic SQL migration runner.
  *
  * * Files are applied in filename order inside `migrations/`.
- * * Each file runs in its own transaction and is recorded with a checksum.
+ * * The whole run is one transaction, guarded by a transaction-scoped advisory
+ *   lock, and each file is recorded with a checksum.
  * * Re-running is a no-op; editing an already-applied file is an error (so
  *   environments cannot silently drift).
  */
@@ -34,24 +36,28 @@ create table if not exists schema_migrations (
 
 export async function runMigrations(): Promise<{ applied: string[]; skipped: string[] }> {
   // Serialise concurrent boots (Render rolling deploys, several instances).
-  await pool.query('select pg_advisory_lock($1)', [MIGRATION_LOCK_KEY]);
-  try {
-    return await applyMigrations();
-  } finally {
-    await pool.query('select pg_advisory_unlock($1)', [MIGRATION_LOCK_KEY]).catch(() => undefined);
-  }
+  //
+  // `pg_advisory_xact_lock` is deliberate: Neon's pooled endpoint is PgBouncer in
+  // transaction mode, which does not support session-level advisory locks and can
+  // hand each query a different backend. A transaction-scoped lock plus all the
+  // migration work inside that same transaction keeps the lock and the work on
+  // one pinned connection, so it holds with or without pooling.
+  return withTransaction(async (client) => {
+    await client.query('select pg_advisory_xact_lock($1)', [MIGRATION_LOCK_KEY]);
+    return applyMigrations(client);
+  });
 }
 
 const MIGRATION_LOCK_KEY = 727_272_001;
 
-async function applyMigrations(): Promise<{ applied: string[]; skipped: string[] }> {
+async function applyMigrations(client: PoolClient): Promise<{ applied: string[]; skipped: string[] }> {
   const directory = resolveMigrationsDir();
   const files = readdirSync(directory)
     .filter((file) => file.endsWith('.sql'))
     .sort();
 
-  await pool.query(CREATE_TRACKING_TABLE);
-  const existing = await pool.query<{ version: string; checksum: string }>(
+  await client.query(CREATE_TRACKING_TABLE);
+  const existing = await client.query<{ version: string; checksum: string }>(
     'select version, checksum from schema_migrations',
   );
   const appliedChecksums = new Map(existing.rows.map((row) => [row.version, row.checksum]));
@@ -75,13 +81,11 @@ async function applyMigrations(): Promise<{ applied: string[]; skipped: string[]
     }
 
     const started = Date.now();
-    await withTransaction(async (client) => {
-      await client.query(sql);
-      await client.query(
-        'insert into schema_migrations (version, checksum, duration_ms) values ($1, $2, $3)',
-        [file, checksum, Date.now() - started],
-      );
-    });
+    await client.query(sql);
+    await client.query(
+      'insert into schema_migrations (version, checksum, duration_ms) values ($1, $2, $3)',
+      [file, checksum, Date.now() - started],
+    );
     applied.push(file);
     logger.info(`Migration applied: ${file}`, { durationMs: Date.now() - started });
   }

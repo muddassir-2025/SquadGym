@@ -121,7 +121,7 @@ export interface MemberDetailDto {
 export async function getMemberDetail(auth: AuthContext, memberId: string): Promise<MemberDetailDto> {
   const gym = await requireGym(auth.gymId);
   const today = todayIn(gym.timezone);
-  const row = await getMember(gym.id, memberId);
+  const row = await getMember(gym.id, memberId, today);
   if (!row) throw AppError.notFound('Member');
 
   const [extras, history, attendance, renewals] = await Promise.all([
@@ -306,7 +306,8 @@ export async function updateMember(
   meta: RequestMeta,
 ): Promise<MemberDto> {
   const gym = await requireGym(auth.gymId);
-  const existing = await getMember(gym.id, memberId);
+  const today = todayIn(gym.timezone);
+  const existing = await getMember(gym.id, memberId, today);
   if (!existing) throw AppError.notFound('Member');
 
   if (input.email && input.email.trim().toLowerCase() !== existing.email.toLowerCase()) {
@@ -333,9 +334,9 @@ export async function updateMember(
     userAgent: meta.userAgent ?? null,
   });
 
-  const refreshed = await getMember(gym.id, memberId);
+  const refreshed = await getMember(gym.id, memberId, today);
   if (!refreshed) throw AppError.notFound('Member');
-  return toMemberDto(refreshed, gym, todayIn(gym.timezone));
+  return toMemberDto(refreshed, gym, today);
 }
 
 export async function archiveMember(

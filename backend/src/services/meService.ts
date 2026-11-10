@@ -72,7 +72,7 @@ export async function memberDashboard(auth: AuthContext, month?: string): Promis
 
   const [dashboard, member, days, membership] = await Promise.all([
     todayDashboard(auth),
-    getMember(gym.id, auth.userId),
+    getMember(gym.id, auth.userId, today),
     getOperatingDays(gym.id),
     getCurrentMembership(auth.userId),
   ]);
@@ -253,9 +253,10 @@ export async function myAttendanceHistory(
 
 export async function myProfile(auth: AuthContext): Promise<MemberDto> {
   const gym = await requireGym(auth.gymId);
-  const member = await getMember(gym.id, auth.userId);
+  const today = todayIn(gym.timezone);
+  const member = await getMember(gym.id, auth.userId, today);
   if (!member) throw AppError.notFound('Member profile');
-  return toMemberDto(member, gym, todayIn(gym.timezone));
+  return toMemberDto(member, gym, today);
 }
 
 export async function myMembership(auth: AuthContext): Promise<MembershipDto | null> {
